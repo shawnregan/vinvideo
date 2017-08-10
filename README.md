@@ -3,11 +3,11 @@ install http-server:
      npm install http-server -g
 
 run:
+     cd vinvideo
+     http-server -c -1 -o
 
-     http-server -c -1
+Browser (not needed with the "o" param above)":
 
-Browser:
-
-    http://127.0.0.1:8080
+http://127.0.0.1:8080
     
 # videopopup

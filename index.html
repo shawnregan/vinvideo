@@ -5,68 +5,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
 
-  <title>Onsen UI YouTube</title>
+  <title>YouTube</title>
 
-  <script src="cordova.js"></script>
-  <script src="./lib/onsenui/js/onsenui.js"></script>
   <script src="./lib/angular/angular-1.5.8.min.js"></script>
-  <script src="./lib/onsenui/js/angular-onsenui.js"></script>
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>
 
-  <link rel="stylesheet" href="./lib/onsenui/css/onsenui.css">
-  <link rel="stylesheet" href="./lib/onsenui/css/onsen-css-components.css">
-  <link rel="stylesheet" href="./css/style.css">
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-
+  <script>
+      var videos= [
+          {id:"9B1DKszsMRk",title:"FEARLESS CATS 23 Badass Cats Who Will Amaze You [Funny Pets]",
+              description:"Buy your cat food via this link & support our channel! ➤ http://amzn.to/2fvY8fF Thank you! National Geographic says that in the wild, a small cat would ...",
+              thumbnail:"https://i.ytimg.com/vi/9B1DKszsMRk/default.jpg","author":"Funny Pets"},
+          { id:"pONI9gXAcmw", title:"LightSpeed Valet"},
+          { id: "WmmUlLud1Oo", title: "CD-10 in the Olympics - 2016 Golf"}];
+  </script>
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
-<body ng-app="myApp" ng-controller="VideosController">
+<body id="theApp" ng-app="myApp" ng-controller="VideosController">
+<br/>
+Choose Video:<select id="mySelect">
+  <option></option>
+  <option value="0">FEARLESS CATS</option>
+  <option value="1">LightSpeed Valet</option>
+  <option value="2">CD-10 in the Olympics</option>
+</select>
 
-  <ons-page>
+<div id="myModal" var="modal" class="modal">
 
-    <ons-toolbar>
-      <ons-if class="left" platform="android"></ons-if>
-      <div class="center" style="width: 100%">
-        <ons-if platform="android">Onsen UI Jukebox</ons-if>
-        <ons-if platform="ios other">{{toolbarTitle}}</ons-if>
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" ng-click="modal.style.display='none';">&times;</span>
+      <h2>Modal Header</h2>
+    </div>
+    <div class="modal-body" >
+      <div id="player" xclass="videowrapper">
+        <div id="placeholder" xstyle="width: 100%"></div>
       </div>
-      <ons-if class="right" platform="android">
-        <ons-toolbar-button ng-click="androidSearchModal.show(); ">
-          <ons-icon icon="md-search"></ons-icon>
-        </ons-toolbar-button>
-      </ons-if>
-    </ons-toolbar>
+    </div>
+    <div class="content"></div>
+    <div class="background" style="background-color: transparent"></div>
+  </div>
+</div>
 
-    <ons-tabbar var="tabbar" position="auto">
-      <ons-tab page="html/search.html"active ng-attr-icon="{{!isAndroid() && 'ion-ios-search-strong' || undefined }}" label="Search"></ons-tab>
-      <ons-tab page="html/history.html" ng-attr-icon="{{!isAndroid() && 'ion-ios-clock-outline' || undefined }}" label="History"></ons-tab>
-    </ons-tabbar>
+<script>
+    // Get the modal
+    modal = document.getElementById('myModal');
 
-    <ons-modal var="modal" ng-click="youtube.player.stopVideo(); modal.hide();">
-      <div id="player">
-        <div id="placeholder" style="width: 100%"></div>
-      </div>
-    </ons-modal>
+    // Get the button that opens the modal
+    var span = document.getElementsByClassName("close")[0];
+    var combo = document.getElementById("mySelect");
 
-    <ons-modal animation="fade" animation-options="{ duration: 0.15 }" var="androidSearchModal" class="android-search-modal" ng-click="androidSearchModal.hide();">
-      <ons-page ons-show="focusInput('android')">
-        <ons-toolbar class="android-search-bar">
-          <div class="left">
-            <ons-toolbar-button>
-              <ons-icon style="color: #e52d27" icon="md-arrow-left"></ons-icon>
-            </ons-toolbar-button>
-          </div>
-          <label class="center" ng-click="$event.stopPropagation()">
-            <form ng-submit="search(true); tabbar.setActiveTab(0); androidSearchModal.hide();">
-              <ons-input type="search" modifier="transparent" input-id="android-search-input" placeholder="Search for videos in YouTube" ng-model="query"></ons-input>
-            </form>
-          </label>
-        </ons-toolbar>
-        <div class="content"></div>
-        <div class="background" style="background-color: transparent"></div>
-      </ons-page>
-    </ons-modal>
+    span.onclick = function() {
+        // Stop the video
+        angular.element(document.getElementById('theApp')).scope().stop();
+        modal.style.display = "none";
+    };
 
-  </ons-page>
+    combo.onchange = function() {
+        var x = combo.value;
+
+        modal.style.display = "block";
+        angular.element(document.getElementById('theApp')).scope().launch(videos[Number(x)]);
+    };
+
+
+</script>
 </body>
 </html>
